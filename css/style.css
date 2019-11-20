@@ -1,0 +1,9 @@
+@media (max-width: 767px) {
+    .search-bar-sam {
+      display: none;
+    }
+}
+
+i {
+    font-size:30px;
+}
