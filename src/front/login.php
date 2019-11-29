@@ -13,10 +13,22 @@ require_once('../../includes/header.php');
                 <input type="password" name="passwd" placeholder="Mot de passe" style="border:0;" class="bg-dark text-white rounded text-center font-weight-bold form-control" required><br><br>
                 <button type="submit" class="btn btn-lg btn-rounded btn-primary font-weight-bold">Se connecter</button><br>
                 <?php
+                    if (isset($_GET['mail']) && $_GET['mail'] != 1 && $_GET['mail'] != 2)
+                        echo '<br><p class="text-success font-weight-bold">Un e-mail à été envoyé a l\'adresse suivante: '.$_GET['mail'].'.</p>';
+                    if (isset($_GET['mail']) && $_GET['mail'] == 1)
+                        echo '<br><p class="text-success font-weight-bold">Votre compte à bien été activé.</p>';
+                    if (isset($_GET['mail']) && $_GET['mail'] == 2)
+                        echo '<br><p class="text-danger font-weight-bold">Erreur lors de l\'envoi de l\'e-mail.</p>';
                     if (isset($_GET['error']) && $_GET['error'] == 1)
                         echo '<br><p class="text-danger font-weight-bold">Le login ou le mot de passe est incorrect.</p>';
                     else if (isset($_GET['error']) && $_GET['error'] == 2)
                         echo '<br><p class="text-danger font-weight-bold">Veuillez remplir les champs.</p>';
+                    else if (isset($_GET['error']) && $_GET['error'] == 3)
+                        echo '<br><p class="text-danger font-weight-bold">Veuillez activer votre compte via l\'e-mail qui vous a été envoyé.</p>';
+                    else if (isset($_GET['error']) && $_GET['error'] == 4)
+                        echo '<br><p class="text-danger font-weight-bold">Votre compte est déjà actif.</p>';
+                    else if (isset($_GET['error']) && $_GET['error'] == 5)
+                        echo '<br><p class="text-danger font-weight-bold">Veuillez vous identifier pour accéder à cette page.</p>';
                 ?>
                 <br>
                 <a href="signup.php" class="btn btn-sm btn-rounded btn-primary font-weight-bold">S'inscrire</a><br>

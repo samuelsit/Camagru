@@ -33,24 +33,25 @@ if (empty($user))
         <div class="col-lg-5 text-center">
             <div class="bg-dark p-4 rounded">
                 <form action="../back/profile.php" method="POST">
+                    <input type="text" style="border:0;" class="bg-dark text-white mt-1 w-100 rounded text-center font-weight-bold form-control" value="<?= $user['acc_user'] ?>" required disabled><br>
                     <input type="text" name="nom" placeholder="Nom" style="border:0;" class="bg-dark text-white w-100 rounded text-center font-weight-bold form-control" value="<?= $user['acc_lastname'] ?>" required <?= $disabled ?>><br>
                     <input type="text" name="prenom" placeholder="Prénom" style="border:0;" class="bg-dark text-white mt-1 w-100 rounded text-center font-weight-bold form-control" value="<?= $user['acc_firstname'] ?>" required <?= $disabled ?>><br>
-                    <input type="text" name="pseudo" placeholder="Pseudo" style="border:0;" class="bg-dark text-white mt-1 w-100 rounded text-center font-weight-bold form-control" value="<?= $user['acc_user'] ?>" required <?= $disabled ?>><br>
                     <input type="text" name="phone" placeholder="Téléphone" style="border:0;" class="bg-dark text-white mt-1 w-100 rounded text-center font-weight-bold form-control" value="<?= $user['acc_phone'] ?>" required <?= $disabled ?>><br>
                     <input type="text" name="mail" placeholder="E-mail" style="border:0;" class="bg-dark text-white mt-1 w-100 rounded text-center font-weight-bold form-control" value="<?= $user['acc_email'] ?>" required <?= $disabled ?>><br>
                     <?php if ($modify == 1) { ?>
                     <br><button type="submit" class="mt-1 btn w-75 btn-rounded btn-primary font-weight-bold">Modifier</button><br>
+                    <a href="../back/reinit.php" class="mt-1 btn btn-sm btn-rounded btn-primary font-weight-bold">Changer son mot de passe</a>
                     <?php } ?>
                 </form>
             </div>
         </div>
-        <div class="col-lg-7 text-center mt-1">
-            <div class="row p-2 rounded">
+        <div class="col-lg-7 text-center">
+            <div class="row rounded">
             <?php
-                $req = $db->query("SELECT * FROM picture WHERE pic_acc = ".$user['acc_id']."");
+                $req = $db->query("SELECT * FROM picture WHERE pic_user = ".$user['acc_id']." ORDER BY pic_date DESC");
                 while ($pic = $req->fetch()) {
-                    echo '<div class="col-sm-3 p-2">
-                        <img class="img-fluid rounded bg-dark p-2" src="../../uploads/'.$pic['pic_data'].'">
+                    echo '<div class="col-sm-6 col-md-4 col-lg-3 mt-lg-0 mt-2 mb-2">
+                        <a href="picture.php?pic='.$pic['pic_id'].'"><img class="img-fluid rounded bg-dark p-2" src="../back/mergepic.php?pic='.$pic['pic_id'].'&filter='.$pic['pic_filter'].'"></a>
                     </div>';
                 }
             ?>
