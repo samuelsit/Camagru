@@ -2,6 +2,21 @@ function changeImage()
 {
     var xp = document.getElementById("video_prev");
     var vp = xp.getAttribute("src");
+    var xpf = document.getElementById("previewfilter");
+    var vpf = xpf.getAttribute("class");
+    if (vpf == "no-camera") {
+        if (document.getElementById("none").checked == true)
+            vpf = "../../ressources/filtres/0.png";
+        else if (document.getElementById("sepia").checked == true)
+            vpf = "../../ressources/filtres/1.png";
+        else if (document.getElementById("flamme").checked == true)
+            vpf = "../../ressources/filtres/2.png";
+        else if (document.getElementById("marvel").checked == true)
+            vpf = "../../ressources/filtres/3.png";
+        else if (document.getElementById("coeur").checked == true)
+            vpf = "../../ressources/filtres/4.png";
+        xpf.setAttribute("src", vpf);
+    }
     if (document.getElementById("none").checked == true)
         vp = "../../ressources/filtres/0.png";
     else if (document.getElementById("sepia").checked == true)
@@ -26,7 +41,17 @@ function init() {
             video.play();
         };
       
-    }).catch(function(err) { console.log(err.name + ": " + err.message); });
+    }).catch(function(err) {
+        console.log(err.name + ": " + err.message);
+        var x = document.getElementById("previewfilter");
+        x.setAttribute("class", "no-camera");
+        var filter = document.getElementById("video_prev");
+        var vid = document.getElementById("sourcevid");
+        var button = document.getElementById("startbutton");
+        filter.classList.add("d-none");
+        button.classList.add("d-none");
+        vid.classList.add("d-none");
+    });
 
 }
 

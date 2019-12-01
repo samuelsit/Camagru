@@ -11,9 +11,9 @@ require_once('../../includes/header.php');
 <div class="container-fluid">
     <div class="row bg-primary p-2">
         <div class="col-lg-7 text-center">
-            <div class="bg-dark p-2 rounded" style="position:relative;">
-                <video id="sourcevid" class="rounded" width="100%" height="70%" autoplay="true"></video>
-                <img id="video_prev" src="../../ressources/filtres/0.png" width="100%" class="p-2" style="position:absolute; top:0px; left:0px;">
+            <div class="bg-dark rounded" style="position:relative;">
+                <video id="sourcevid" width="90%" autoplay="true"></video>
+                <img id="video_prev" src="../../ressources/filtres/0.png" width="90%" style="position:absolute; top:0px; left:5%">
                 <div class="text-center">
                     <button onclick="picture()" id="startbutton" class="btn btn-rounded btn-primary w-100 font-weight-bold">TAKE PHOTO</button>
                     <form>
