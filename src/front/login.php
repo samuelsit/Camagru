@@ -13,6 +13,8 @@ require_once('../../includes/header.php');
                 <input type="password" name="passwd" placeholder="Mot de passe" style="border:0;" class="bg-dark text-white rounded text-center font-weight-bold form-control" required><br><br>
                 <button type="submit" class="btn btn-lg btn-rounded btn-primary font-weight-bold">Se connecter</button><br>
                 <?php
+                    if (isset($_GET['success']) && $_GET['success'] == 1)
+                        echo '<br><p class="text-success font-weight-bold">Votre mot de passe à bien été modifié.</p>';
                     if (isset($_GET['mail']) && $_GET['mail'] != 1 && $_GET['mail'] != 2)
                         echo '<br><p class="text-success font-weight-bold">Un e-mail à été envoyé a l\'adresse suivante: '.$_GET['mail'].'.</p>';
                     if (isset($_GET['mail']) && $_GET['mail'] == 1)

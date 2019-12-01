@@ -13,9 +13,7 @@ if ($activ['acc_actif'] == '1')
     header('Location: ../front/login.php?error=4');
 else {
     if ($cle == $activ['acc_key']) {
-        $req = $db->prepare("UPDATE access SET acc_actif = 1 WHERE acc_user = :user ");
-        $req->bindParam(':user', $login);
-        $req->execute();
+        $req = $db->prepare("UPDATE access SET acc_actif = 1 WHERE acc_user = :user ")->bindParam(':user', $login)->execute();
         header('Location: ../front/login.php?mail=1');
     }
     else

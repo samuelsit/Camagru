@@ -45,27 +45,10 @@
       <?php
          $req = $db->query("SELECT * FROM picture ORDER BY pic_date DESC LIMIT ".(($currentPage-1)*$nbPerPage).",".$nbPerPage);
          while ($pic = $req->fetch()) {
-            switch ($pic['pic_filter']) {
-                case 0:
-                    $filt = "Aucun";
-                    break;
-                case 1:
-                    $filt = "Sépia";
-                    break;
-                case 2:
-                    $filt = "Feu";
-                    break;
-                case 3:
-                    $filt = "Marvel";
-                    break;
-                case 4:
-                    $filt = "Coeurs";
-                    break;
-            }
            $user = $db->query("SELECT acc_user FROM access WHERE acc_id = ".$pic['pic_user']."")->fetch();
            echo '<div class="col-lg-2 col-md-3 col-sm-6 p-2">
                    <a href="src/front/picture.php?pic='.$pic['pic_id'].'"><img class="img-fluid rounded bg-dark p-2" src="src/back/mergepic.php?pic='.$pic['pic_id'].'&filter='.$pic['pic_filter'].'"></a>
-                   <a href="src/front/profile.php?user='.$user['acc_user'].'"><p class="font-weight-bold text-light">'.$user['acc_user'].' &middot; '.date("d/m/y", strtotime($pic['pic_date'])).' &middot; '.$filt.'</p></a>
+                   <a href="src/front/profile.php?user='.$user['acc_user'].'"><p class="font-weight-bold text-light">'.$user['acc_user'].' &middot; '.date("d/m/y", strtotime($pic['pic_date'])).'</p></a>
                </div>';
          }
          
@@ -74,16 +57,16 @@
    <div class="row text-center text-white p-2 bg-primary">
       <div class="col">
          <span class="mr-3">
-         <a href="index.php?p=<?= "1" ?>" class="btn btn-outline-light bg-dark"><i class="text-light fas fa-angle-double-left"></i></a>
+         <a href="index.php?p=<?= "1" ?>" class="btn btn-outline-light bg-dark"><img width="30" src="/ressources/angle-double-left-solid.svg"></a>
          </span>
          <span class="mr-3">
-         <a href="index.php?p=<?= $left ?>" class="btn btn-outline-light bg-dark"><i class="text-light fas fa-angle-left"></i></a>
+         <a href="index.php?p=<?= $left ?>" class="btn btn-outline-light bg-dark"><img width="30" src="/ressources/angle-left-solid.svg"></a>
          </span>
          <span class="ml-3">
-         <a href="index.php?p=<?= $right ?>" class="btn btn-outline-light bg-dark"><i class="text-light fas fa-angle-right"></i></a>
+         <a href="index.php?p=<?= $right ?>" class="btn btn-outline-light bg-dark"><img style="transform: rotate(180deg);" width="30" src="/ressources/angle-left-solid.svg"></a>
          </span>
          <span class="ml-3">
-         <a href="index.php?p=<?= $nbPage-1 ?>" class="btn btn-outline-light bg-dark"><i class="text-light fas fa-angle-double-right"></i></a>
+         <a href="index.php?p=<?= $nbPage-1 ?>" class="btn btn-outline-light bg-dark"><img style="transform: rotate(180deg);" width="30" src="/ressources/angle-double-left-solid.svg"></a>
          </span>
       </div>
    </div>

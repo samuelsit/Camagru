@@ -26,52 +26,55 @@ $mail = isset($_POST['mail']) ? $_POST['mail'] : NULL;
 
 $reqPseudo = $db->query("SELECT acc_user FROM access");
 while ($user = $reqPseudo->fetch()) {
-    if ($user['acc_user'] == $pseudo)
+    if ($user['acc_user'] == $pseudo) {
         header('Location: ../front/signup.php?error=3');
+        die();
+    }
 }
 
-if (empty($nom) || empty($prenom) || empty($pseudo) || empty($passwd) || empty($repasswd) || empty($phone) || empty($mail))
+if (empty($nom) || empty($prenom) || empty($pseudo) || empty($passwd) || empty($repasswd) || empty($phone) || empty($mail)) {
     header('Location: ../front/signup.php?error=1');
-else if ($passwd != $repasswd)
+    die();
+}
+else if ($passwd != $repasswd) {
     header('Location: ../front/signup.php?error=2');
-else if (strlen($pseudo) >= 20 || strlen($nom) >= 30 || strlen($prenom) >= 30 || strlen($phone) >= 20 || strlen($mail) >= 40)
+    die();
+}
+else if (!preg_match("@^[a-zA-Z0-9_]{3,16}$@", $pseudo) || !preg_match("@^([a-zA-Z' ]+)$@", $nom) || !preg_match("@^([a-zA-Z' ]+)$@",$prenom) || !preg_match("@^((\+)33|0)[1-9](\d{2}){4}$@", $phone) || !filter_var($mail, FILTER_VALIDATE_EMAIL)) {
     header('Location: ../front/signup.php?error=3');
+    die();
+}
+else if (!preg_match('@[A-Z]@', $passwd) || !preg_match('@[a-z]@', $passwd) || !preg_match('@[0-9]@', $passwd) || strlen($passwd) < 6) {
+    header('Location: ../front/signup.php?error=4');
+    die();
+}
 
 $salt = getSalt(10);
 $key = getSalt(32);
 
 $user_password = hash('whirlpool', $passwd.$salt);
 
-$req = $db->prepare("INSERT INTO access (acc_user, acc_pass, acc_salt, acc_firstname, acc_lastname, acc_phone, acc_email, acc_key, acc_actif) VALUES (:pseudo, :passwd, :salt, :prenom, :nom, :phone, :mail, :keys, :actif)");
-$req->execute(array(
-    'pseudo' => $pseudo,
-    'passwd' => $user_password,
-    'salt' => $salt,
-    'prenom' => $prenom,
-    'nom' => $nom,
-    'phone' => $phone,
-    'mail' => $mail,
-    'keys' => $key,
-    'actif' => 0
-));
-
 $destinataire = $mail;
 $sujet = "Activer votre compte" ;
 $entete = "From: inscription@camagru.com" ;
  
-$message = 'Bienvenue sur Camagru,
+$message = "Bienvenue sur Camagru,\n\nPour activer votre compte, veuillez cliquer sur le lien ci dessous\nou copier/coller dans votre navigateur internet.\n\nhttp://localhost:8888/src/back/activation.php?user=".$pseudo."&key=".$key."\n\n---------------\nCeci est un mail automatique, Merci de ne pas y répondre.";
  
-Pour activer votre compte, veuillez cliquer sur le lien ci dessous
-ou copier/coller dans votre navigateur internet.
- 
-http://localhost:8888/src/back/activation.php?user='.$pseudo.'&key='.$key.'
- 
- 
----------------
-Ceci est un mail automatique, Merci de ne pas y répondre.';
- 
- 
-if (mail($destinataire, $sujet, $message, $entete) == TRUE)
+if (mail($destinataire, $sujet, $message, $entete) == TRUE) {
+    $req = $db->prepare("INSERT INTO access (acc_user, acc_pass, acc_salt, acc_firstname, acc_lastname, acc_phone, acc_email, acc_send, acc_key, acc_actif) VALUES (:pseudo, :passwd, :salt, :prenom, :nom, :phone, :mail, :envoi, :keys, :actif)");
+    $req->execute(array(
+        'pseudo' => $pseudo,
+        'passwd' => $user_password,
+        'salt' => $salt,
+        'prenom' => $prenom,
+        'nom' => $nom,
+        'phone' => $phone,
+        'mail' => $mail,
+        'envoi' => 1,
+        'keys' => $key,
+        'actif' => 0
+    ));
     header('Location: ../front/login.php?mail='.$mail.'');
+}
 else
     header('Location: ../front/login.php?mail=2');

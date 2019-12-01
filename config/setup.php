@@ -19,7 +19,10 @@ try
         `acc_firstname` varchar(30) NOT NULL,
         `acc_lastname` varchar(30) NOT NULL,
         `acc_phone` varchar(20) NOT NULL,
-        `acc_email` varchar(40) NOT NULL
+        `acc_email` varchar(40) NOT NULL,
+        `acc_send` int(1) NOT NULL DEFAULT '1',
+        `acc_key` varchar(32) NOT NULL,
+        `acc_actif` int(1) NOT NULL DEFAULT '0'
       )");
 
 	$db->query("CREATE TABLE `picture` (

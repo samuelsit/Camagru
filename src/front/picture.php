@@ -10,6 +10,7 @@ if ($imgExist[0] == 0)
 $title = ucfirst(substr(basename(__FILE__), 0, -4))." ".$picture;
 require_once('../../includes/header.php');
 $pic = $db->query("SELECT pic_filter, pic_date FROM picture WHERE pic_id = ".$picture."")->fetch();
+$mine = 0;
 if (!empty($_SESSION['user'])) {
     $user_id = $db->query("SELECT acc_id FROM access WHERE acc_user = \"".$_SESSION['user']."\"")->fetch();
     $isLiked = $db->query("SELECT COUNT(*) FROM likes WHERE like_pic = ".$picture." AND like_user = ".$user_id['acc_id']."")->fetch();
@@ -17,6 +18,10 @@ if (!empty($_SESSION['user'])) {
 }
 $pic_uid = $db->query("SELECT pic_user FROM picture WHERE pic_id = ".$picture."")->fetch();
 $pic_user = $db->query("SELECT acc_user FROM access WHERE acc_id = ".$pic_uid['pic_user']."")->fetch();
+
+if (!empty($_SESSION['user']) && $user_id['acc_id'] == $pic_uid['pic_user']) {
+    $mine = 1;
+}
 
 switch ($pic['pic_filter']) {
     case 0:
@@ -71,6 +76,10 @@ $like = !empty($_SESSION['user']) ? $nblike[0] : $nblike[0]." like&middot;s";
                 <iframe height="100" width="100%" src="speak.php?pic=<?= $picture ?>" frameborder="0"></iframe>
             </div>
         </div>
+        <?php
+        if ($mine == 1)
+            echo '<a href="../back/delete-pic.php?pic='.$picture.'" class="mt-2 ml-3 btn btn-sm btn-danger" onclick="if(window.confirm(\'Voulez-vous vraiment supprimer cette photo ?\n! Attention, cette action est irréversible !\')){return true;}else{return false;}">Supprimer cette photo</a>';
+        ?>
     </div>
 </div>
 

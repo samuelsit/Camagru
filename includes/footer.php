@@ -3,28 +3,23 @@
             <div class="container">
                 <ul class="list-inline text-center">
                     <li class="list-inline-item">
-                        <a class="mx-1">
-                        <i class="fab fa-facebook-f"> </i>
+                        <a href="https://www.facebook.com/" target="_blank" class="mx-1">
+                            <img width="20" src="/ressources/facebook-f-brands.svg">
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a class="mx-1">
-                        <i class="fab fa-twitter"> </i>
+                        <a href="https://twitter.com/" target="_blank" class="mx-1">
+                            <img width="32" src="/ressources/twitter-brands.svg">
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a class="mx-1">
-                        <i class="fab fa-google-plus-g"> </i>
+                        <a href="https://plus.google.com" target="_blank" class="mx-1">
+                            <img width="45" src="/ressources/google-plus-g-brands.svg">
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a class="mx-1">
-                        <i class="fab fa-linkedin-in"> </i>
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="mx-1">
-                        <i class="fab fa-dribbble"> </i>
+                        <a href="https://www.linkedin.com/" target="_blank" class="mx-1">
+                            <img width="30" src="/ressources/linkedin-in-brands.svg">
                         </a>
                     </li>
                 </ul>
