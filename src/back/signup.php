@@ -32,6 +32,14 @@ while ($user = $reqPseudo->fetch()) {
     }
 }
 
+$reqMail = $db->query("SELECT acc_email FROM access");
+while ($email = $reqMail->fetch()) {
+    if ($email['acc_email'] == $mail) {
+        header('Location: ../front/signup.php?error=3');
+        die();
+    }
+}
+
 if (empty($nom) || empty($prenom) || empty($pseudo) || empty($passwd) || empty($repasswd) || empty($phone) || empty($mail)) {
     header('Location: ../front/signup.php?error=1');
     die();
@@ -56,11 +64,22 @@ $user_password = hash('whirlpool', $passwd.$salt);
 
 $destinataire = $mail;
 $sujet = "Activer votre compte" ;
-$entete = "From: inscription@camagru.com" ;
+$entete = array();
+$entete[] = 'MIME-Version: 1.0';
+$entete[] = 'Content-Type: text/html; charset=utf-8';
+$entete[] = 'To: <' . $destinataire . '>';
+$entete[] = "From: Camagru <noreply@camagru.com>" ;
  
-$message = "Bienvenue sur Camagru,\n\nPour activer votre compte, veuillez cliquer sur le lien ci dessous\nou copier/coller dans votre navigateur internet.\n\nhttp://localhost:8888/src/back/activation.php?user=".$pseudo."&key=".$key."\n\n---------------\nCeci est un mail automatique, Merci de ne pas y répondre.";
- 
-if (mail($destinataire, $sujet, $message, $entete) == TRUE) {
+$message = "<html>
+                <head>
+                </head>
+                <body>
+                    <h1>Bienvenue sur Camagru,</h1>
+                    <p>Pour activer votre compte, veuillez cliquer sur le lien ci dessous<br>ou copier/coller dans votre navigateur internet.<br><br>http://localhost:8888/src/back/activation.php?user=".$pseudo."&key=".$key."<br><br>---------------<br>Ceci est un mail automatique, Merci de ne pas y répondre.</p>
+                </body>
+            </html>";
+
+if (mail($destinataire, $sujet, $message, implode("\r\n", $entete)) == TRUE) {
     $req = $db->prepare("INSERT INTO access (acc_user, acc_pass, acc_salt, acc_firstname, acc_lastname, acc_phone, acc_email, acc_send, acc_key, acc_actif) VALUES (:pseudo, :passwd, :salt, :prenom, :nom, :phone, :mail, :envoi, :keys, :actif)");
     $req->execute(array(
         'pseudo' => $pseudo,

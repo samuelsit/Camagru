@@ -2,8 +2,7 @@
 $title = ucfirst(substr(basename(__FILE__), 0, -4));
 require_once('../../includes/header.php');
 
-if (!empty($_GET['key']))
-    $key = "?key=".$_GET['key'];
+$key = !empty($_GET['key']) ? "?key=".$_GET['key'] : NULL;
 ?>
 
 <div class="container-fluid">

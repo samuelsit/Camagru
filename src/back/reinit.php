@@ -9,9 +9,11 @@ else if (!empty($_GET['key']))
 $title = ucfirst(substr(basename(__FILE__), 0, -4));
 require_once('../../config/database.php');
 
+$link = !empty($_GET['key']) ? "&key=".$_GET['key']."" : NULL;
+
 $count = $db->query("SELECT COUNT(*) FROM access WHERE ".$where."")->fetch();
 if ($count[0] == 0) {
-    header('Location: ../front/reinit.php?error=4');
+    header('Location: ../front/reinit.php?error=4'.$link);
     die();
 }
 
@@ -28,19 +30,19 @@ if (empty($_GET['key']))
     $user_password_before = hash('whirlpool', $pwdbefore.$user['acc_salt']);
 
 if ((empty($pwdbefore) && empty($_GET['key'])) || empty($pwd) || empty($repwd)) {
-    header('Location: ../front/reinit.php?error=1');
+    header('Location: ../front/reinit.php?error=1'.$link);
     die();
 }
 else if ($pwd !== $repwd) {
-    header('Location: ../front/reinit.php?error=2');
+    header('Location: ../front/reinit.php?error=2'.$link);
     die();
 }
 else if (($user_password_before !== $user['acc_pass']) && empty($_GET['key'])) {
-    header('Location: ../front/reinit.php?error=3');
+    header('Location: ../front/reinit.php?error=3'.$link);
     die();
 }
 else if (!preg_match('@[A-Z]@', $pwd) || !preg_match('@[a-z]@', $pwd) || !preg_match('@[0-9]@', $pwd) || strlen($pwd) < 6) {
-    header('Location: ../front/reinit.php?error=5');
+    header('Location: ../front/reinit.php?error=5'.$link);
     die();
 }
 
@@ -52,7 +54,7 @@ $req->execute(array(
     'user' => $user['acc_id']
 ));
 
-if ($error == 0 && empty($_GET['key']))
+if (empty($_GET['key']))
     header('Location: ../front/profile.php');
 else
     header('Location: ../front/login.php?success=1');

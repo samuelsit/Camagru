@@ -24,7 +24,7 @@ if (isset($_GET['pic']) || isset($_POST['pic']))
         if (isset($_GET['pic']) || isset($_POST['pic'])) {
             $user_id = $db->query("SELECT acc_id, acc_user FROM access WHERE acc_user = \"".$_SESSION['user']."\"")->fetch();
             $pic_uid = $db->query("SELECT pic_user FROM picture WHERE pic_id = ".$pic."")->fetch();
-            $pic_user = $db->query("SELECT acc_firstname, acc_email, acc_send FROM access WHERE acc_id = ".$pic_uid['pic_user']."")->fetch();
+            $pic_user = $db->query("SELECT acc_firstname, acc_email, acc_send, acc_user FROM access WHERE acc_id = ".$pic_uid['pic_user']."")->fetch();
         }
         else {
             $error = 1;
@@ -40,22 +40,23 @@ if (isset($_GET['pic']) || isset($_POST['pic']))
             ));
             $destinataire = $pic_user['acc_email'];
             $sujet = "Nouveau commentaire sur votre photo" ;
-            $entete = "From: noreply@camagru.com" ;
+            $entete = array();
+            $entete[] = 'MIME-Version: 1.0';
+            $entete[] = 'Content-Type: text/html; charset=utf-8';
+            $entete[] = 'To: <' . $destinataire . '>';
+            $entete[] = "From: Camagru <noreply@camagru.com>" ;
+
+            $message = '<html>
+                <head>
+                </head>
+                <body>
+                    <h1>Bonjour '.$pic_user['acc_firstname'].',</h1>
+                    <p>Un nouveau commentaire de la part de '.$user_id['acc_user'].' à été posté sur<br>votre photo, si vous souhaitez lui répondre, cliquez sur ce lien:<br><br>http://localhost:8888/src/front/picture.php?pic='.$pic.'<br>Message: "'.$_POST['msg'].'"<br><br>---------------<br>Ceci est un mail automatique, Merci de ne pas y répondre.</p>
+                </body>
+            </html>';
             
-            $message = 'Bonjour '.$pic_user['acc_firstname'].',
-            
-            Un nouveau commentaire de la part de '.$user_id['acc_user'].' à été posté sur
-            votre photo, si vous souhaitez lui répondre, cliquez sur ce lien:
-            
-            http://localhost:8888/src/front/picture.php?pic='.$pic.'
-            
-            
-            ---------------
-            Ceci est un mail automatique, Merci de ne pas y répondre.';
-            
-            
-            if ($pic_user['acc_send'] == 1) {
-                if (mail($destinataire, $sujet, $message, $entete) == TRUE)
+            if ($pic_user['acc_send'] == 1 && $pic_user['acc_user'] != $_SESSION['user']) {
+                if (mail($destinataire, $sujet, $message, implode("\r\n", $entete)) == TRUE)
                     $error = 0;
                 else
                     $error = 1;

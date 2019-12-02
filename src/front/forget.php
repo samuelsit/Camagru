@@ -5,7 +5,7 @@ require_once('../../includes/header.php');
 
 <div class="container-fluid">
     <div class="text-center bg-primary rounded">
-        <form action="../back/reinit.php" class="p-5" method="POST">
+        <form action="../back/forget.php" class="p-5" method="POST">
             <div class="bg-dark p-5 mx-auto rounded">
                 <h1 class="text-center font-weight-bold">E-mail pour la reinitialisation du mot de passe</h1><br>
                 <input name="email" type="text" placeholder="Votre e-mail" style="border:0;" class="bg-dark text-white rounded text-center font-weight-bold form-control" required><br><br>
