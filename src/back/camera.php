@@ -27,6 +27,8 @@
         'pdate' => date("Y-m-d")." ".date("H:i:s"),
         'filt' => $filter
     ));
+    if (!file_exists(UPLOAD_DIR))
+        mkdir(UPLOAD_DIR, 0777, true);
     $success = file_put_contents(UPLOAD_DIR . $file, $data);
 
 ?>
