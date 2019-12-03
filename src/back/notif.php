@@ -1,8 +1,10 @@
 <?php
 
 require_once('../../includes/session.php');
-if (empty($_SESSION['user']) || !isset($_GET['send']))
+if (empty($_SESSION['user']) || !isset($_GET['send'])) {
     header('Location: ../../index.php');
+    exit();
+}
 require_once('../../config/database.php');
 
 if ($_GET['send'] == 1 || $_GET['send'] == 0) {

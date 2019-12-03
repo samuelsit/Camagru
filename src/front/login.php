@@ -2,6 +2,14 @@
 require_once('../../includes/session.php');
 $title = ucfirst(substr(basename(__FILE__), 0, -4));
 require_once('../../includes/header.php');
+if (isset($_GET['user'])) {
+    $user = $_GET['user'];
+    $focus = 'autofocus';
+}
+else {
+    $user = NULL;
+    $focus = NULL;
+}
 ?>
 
 <div class="container-fluid">
@@ -9,8 +17,8 @@ require_once('../../includes/header.php');
         <form action="../back/login.php" class="p-5" method="POST">
             <div class="bg-dark p-5 mx-auto rounded">
                 <h1 class="text-center font-weight-bold">Se connecter</h1><br>
-                <input type="text" name="login" placeholder="Utilisateur" style="border:0;" class="bg-dark text-white rounded text-center font-weight-bold form-control" required><br><br>
-                <input type="password" name="passwd" placeholder="Mot de passe" style="border:0;" class="bg-dark text-white rounded text-center font-weight-bold form-control" required><br><br>
+                <input type="text" name="login" placeholder="Utilisateur" style="border:0;" value="<?= $user ?>" class="bg-dark text-white rounded text-center font-weight-bold form-control" required><br><br>
+                <input type="password" name="passwd" placeholder="Mot de passe" style="border:0;" class="bg-dark text-white rounded text-center font-weight-bold form-control" required <?= $focus ?>><br><br>
                 <button type="submit" class="btn btn-lg btn-rounded btn-primary font-weight-bold">Se connecter</button><br>
                 <?php
                     if (isset($_GET['success']) && $_GET['success'] == 1)

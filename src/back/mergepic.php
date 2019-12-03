@@ -3,6 +3,8 @@ header ("Content-type: image/png");
 require_once('../../config/database.php');
 
 if (isset($_GET['pic']) && isset($_GET['filter'])) {
+    if (!file_exists('../../ressources/filtres/'.$_GET['filter'].'.png'))
+        die();
     $pic = $db->query("SELECT pic_data FROM picture WHERE pic_id = ".$_GET['pic']."")->fetch();
     $source = imagecreatefrompng('../../ressources/filtres/'.$_GET['filter'].'.png');
     $destination = imagecreatefrompng('../../uploads/'.$pic['pic_data']);

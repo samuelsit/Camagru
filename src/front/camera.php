@@ -1,7 +1,9 @@
 <?php
 require_once('../../includes/session.php');
-if (empty($_SESSION['user']))
+if (empty($_SESSION['user'])) {
     header('Location: login.php?error=5');
+    exit();
+}
 $title = ucfirst(substr(basename(__FILE__), 0, -4));
 require_once('../../includes/header.php');
 ?>

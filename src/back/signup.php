@@ -28,7 +28,7 @@ $reqPseudo = $db->query("SELECT acc_user FROM access");
 while ($user = $reqPseudo->fetch()) {
     if ($user['acc_user'] == $pseudo) {
         header('Location: ../front/signup.php?error=3');
-        die();
+        exit();
     }
 }
 
@@ -36,25 +36,25 @@ $reqMail = $db->query("SELECT acc_email FROM access");
 while ($email = $reqMail->fetch()) {
     if ($email['acc_email'] == $mail) {
         header('Location: ../front/signup.php?error=3');
-        die();
+        exit();
     }
 }
 
 if (empty($nom) || empty($prenom) || empty($pseudo) || empty($passwd) || empty($repasswd) || empty($phone) || empty($mail)) {
     header('Location: ../front/signup.php?error=1');
-    die();
+    exit();
 }
 else if ($passwd != $repasswd) {
     header('Location: ../front/signup.php?error=2');
-    die();
+    exit();
 }
 else if (!preg_match("@^[a-zA-Z0-9_]{3,16}$@", $pseudo) || !preg_match("@^([a-zA-Z' ]+)$@", $nom) || !preg_match("@^([a-zA-Z' ]+)$@",$prenom) || !preg_match("@^((\+)33|0)[1-9](\d{2}){4}$@", $phone) || !filter_var($mail, FILTER_VALIDATE_EMAIL)) {
     header('Location: ../front/signup.php?error=3');
-    die();
+    exit();
 }
 else if (!preg_match('@[A-Z]@', $passwd) || !preg_match('@[a-z]@', $passwd) || !preg_match('@[0-9]@', $passwd) || strlen($passwd) < 6) {
     header('Location: ../front/signup.php?error=4');
-    die();
+    exit();
 }
 
 $salt = getSalt(10);
@@ -94,6 +94,9 @@ if (mail($destinataire, $sujet, $message, implode("\r\n", $entete)) == TRUE) {
         'actif' => 0
     ));
     header('Location: ../front/login.php?mail='.$mail.'');
+    exit();
 }
-else
+else {
     header('Location: ../front/login.php?mail=2');
+    exit();
+}

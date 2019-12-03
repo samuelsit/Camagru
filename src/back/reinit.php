@@ -1,7 +1,20 @@
 <?php
 require_once('../../includes/session.php');
-if (empty($_SESSION['user']) && empty($_GET['key']))
+if (empty($_SESSION['user']) && empty($_GET['key'])) {
     header('Location: ../../index.php');
+    exit();
+}
+
+function getSalt($length) {
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$charactersLength = strlen($characters);
+	$randomString = '';
+	for ($i = 0; $i < $length; $i++) {
+		$randomString .= $characters[rand(0, $charactersLength - 1)];
+	}
+	return $randomString;
+}
+
 if (!empty($_SESSION['user']))
     $where = "acc_user = \"".$_SESSION['user']."\"";
 else if (!empty($_GET['key']))
@@ -14,7 +27,7 @@ $link = !empty($_GET['key']) ? "&key=".$_GET['key']."" : NULL;
 $count = $db->query("SELECT COUNT(*) FROM access WHERE ".$where."")->fetch();
 if ($count[0] == 0) {
     header('Location: ../front/reinit.php?error=4'.$link);
-    die();
+    exit();
 }
 
 foreach ($_POST as $key => $value)
@@ -31,30 +44,35 @@ if (empty($_GET['key']))
 
 if ((empty($pwdbefore) && empty($_GET['key'])) || empty($pwd) || empty($repwd)) {
     header('Location: ../front/reinit.php?error=1'.$link);
-    die();
+    exit();
 }
 else if ($pwd !== $repwd) {
     header('Location: ../front/reinit.php?error=2'.$link);
-    die();
+    exit();
 }
 else if (($user_password_before !== $user['acc_pass']) && empty($_GET['key'])) {
     header('Location: ../front/reinit.php?error=3'.$link);
-    die();
+    exit();
 }
 else if (!preg_match('@[A-Z]@', $pwd) || !preg_match('@[a-z]@', $pwd) || !preg_match('@[0-9]@', $pwd) || strlen($pwd) < 6) {
     header('Location: ../front/reinit.php?error=5'.$link);
-    die();
+    exit();
 }
 
 $new_pwd = hash('whirlpool', $pwd.$user['acc_salt']);
-
-$req = $db->prepare("UPDATE access SET acc_pass = :pass WHERE acc_id = :user");
+$key = getSalt(32);
+$req = $db->prepare("UPDATE access SET acc_pass = :pass, acc_key = :cle WHERE acc_id = :user");
 $req->execute(array(
     'pass' => $new_pwd,
+    'cle' => $key,
     'user' => $user['acc_id']
 ));
 
-if (empty($_GET['key']))
+if (empty($_GET['key'])) {
     header('Location: ../front/profile.php');
-else
+    exit();
+}
+else {
     header('Location: ../front/login.php?success=1');
+    exit();
+}

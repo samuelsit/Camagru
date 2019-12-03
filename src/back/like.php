@@ -1,8 +1,9 @@
 <?php
-    $success = 0;
     require_once('../../includes/session.php');
-    if (empty($_SESSION['user']))
+    if (empty($_SESSION['user'])) {
         header('Location: ../../index.php');
+        exit();
+    }
     require_once('../../config/database.php');
     if (isset($_GET['like']) && isset($_GET['user']) && isset($_GET['pic'])) {
         if ($_GET['like'] == 0) {
@@ -19,12 +20,12 @@
                 'pic' => $_GET['pic']
             ));
         }
-        $success = 1;
-    }
-
-    if ($success == 1)
         header('Location: ../front/picture.php?pic='.$_GET['pic'].'');
-    else
+        exit();
+    }
+    else {
         header('Location: ../../index.php');
+        exit();
+    }
 
 ?>

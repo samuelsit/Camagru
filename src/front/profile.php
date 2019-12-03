@@ -1,7 +1,9 @@
 <?php
 require_once('../../includes/session.php');
-if (empty($_GET['user']) && empty($_SESSION['user']))
-    header('Location: login.php');
+if (empty($_GET['user']) && empty($_SESSION['user'])) {
+    header('Location: login.php?error=5');
+    exit();
+}
 require_once('../../config/database.php');
 $title = ucfirst(substr(basename(__FILE__), 0, -4));
 require_once('../../includes/header.php');
@@ -23,8 +25,10 @@ if ($modify == 0)
 else
     $disabled = "";
 
-if (empty($user))
+if (empty($user)) {
     header('Location: ../../index.php');
+    exit();
+}
 
 if ($user['acc_send'] == 1) {
     $class = "mt-1 btn btn-sm btn-danger btn-rounded font-weight-bold text-white";
@@ -62,8 +66,13 @@ else {
             <?php
                 $req = $db->query("SELECT * FROM picture WHERE pic_user = ".$user['acc_id']." ORDER BY pic_date DESC");
                 while ($pic = $req->fetch()) {
+                    $img = file_exists('../../uploads/'.$pic['pic_data']);
+                    if ($img == FALSE)
+                        $image = "../../ressources/nonExist.png";
+                    else
+                        $image = '../back/mergepic.php?pic='.$pic['pic_id'].'&filter='.$pic['pic_filter'];
                     echo '<div class="col-sm-6 col-md-4 col-lg-3 mt-lg-0 mt-2 mb-2">
-                        <a href="picture.php?pic='.$pic['pic_id'].'"><img class="img-fluid rounded bg-dark p-2" src="../back/mergepic.php?pic='.$pic['pic_id'].'&filter='.$pic['pic_filter'].'"></a>
+                        <a href="picture.php?pic='.$pic['pic_id'].'"><img class="img-fluid rounded bg-dark p-2" src="'.$image.'"></a>
                     </div>';
                 }
             ?>

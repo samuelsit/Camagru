@@ -1,15 +1,19 @@
 <?php
 
     require_once('../../includes/session.php');
-    if (empty($_SESSION['user']))
-        die();
+    if (empty($_SESSION['user'])) {
+        header('Location: ../../index.php');
+        exit();
+    }
     date_default_timezone_set('Europe/Paris');
     require_once('../../config/database.php');
     define('UPLOAD_DIR', '../../uploads/');
     $img = isset($_POST['imgBase64']) ? $_POST['imgBase64'] : NULL;
     $filter = isset($_POST['filter']) ? $_POST['filter'] : NULL;
-    if (empty($img) || !isset($filter))
-        die();
+    if (empty($img) || !isset($filter)) {
+        header('Location: ../../index.php');
+        exit();
+    }
 	$img = str_replace('data:image/png;base64,', '', $img);
 	$img = str_replace(' ', '+', $img);
     $data = base64_decode($img);

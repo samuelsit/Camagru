@@ -2,14 +2,18 @@
 require_once('../../includes/session.php');
 require_once('../../config/database.php');
 $picture = isset($_GET['pic']) ? $_GET['pic'] : NULL;
-if (empty($picture))
+if (empty($picture) || !ctype_digit($picture)) {
     header('Location: ../../index.php');
+    exit();
+}
 $imgExist = $db->query("SELECT COUNT(*) FROM picture WHERE pic_id = ".$picture."")->fetch();
-if ($imgExist[0] == 0)
+if ($imgExist[0] == 0) {
     header('Location: ../../index.php');
+    exit();
+}
 $title = ucfirst(substr(basename(__FILE__), 0, -4))." ".$picture;
 require_once('../../includes/header.php');
-$pic = $db->query("SELECT pic_filter, pic_date FROM picture WHERE pic_id = ".$picture."")->fetch();
+$pic = $db->query("SELECT pic_filter, pic_date, pic_data FROM picture WHERE pic_id = ".$picture."")->fetch();
 $mine = 0;
 if (!empty($_SESSION['user'])) {
     $user_id = $db->query("SELECT acc_id FROM access WHERE acc_user = \"".$_SESSION['user']."\"")->fetch();
@@ -40,6 +44,13 @@ switch ($pic['pic_filter']) {
         $filt = "Coeurs";
         break;
 }
+
+$img = file_exists('../../uploads/'.$pic['pic_data']);
+if ($img == FALSE)
+    $image = "../../ressources/nonExist.png";
+else
+    $image = '../back/mergepic.php?pic='.$picture.'&filter='.$pic['pic_filter'];
+
 $nblike = $db->query("SELECT COUNT(*) FROM likes WHERE like_pic = ".$picture."")->fetch();
 $like = !empty($_SESSION['user']) ? $nblike[0] : $nblike[0]." like&middot;s";
 ?>
@@ -51,7 +62,7 @@ $like = !empty($_SESSION['user']) ? $nblike[0] : $nblike[0]." like&middot;s";
                 <div class="text-center mb-2 text-light">
                     Photo de <a href="profile.php?user=<?= $pic_user['acc_user'] ?>" class="text-white font-weight-bold"><?= $pic_user['acc_user'] ?></a> publiée le <span class="text-white font-weight-bold"><?= date("d/m/Y", strtotime($pic['pic_date'])) ?></span> à <span class="text-white font-weight-bold"><?= date("H:i", strtotime($pic['pic_date'])) ?></span> avec le filtre <span class="text-white font-weight-bold"><?= $filt ?></span>
                 </div>
-                <img class="img-fluid rounded" width="90%" src="../back/mergepic.php?pic=<?= $picture ?>&filter=<?= $pic['pic_filter'] ?>">
+                <img class="img-fluid rounded" width="90%" src="<?= $image ?>">
                 <?php
                 if (!empty($_SESSION['user'])) { 
                 ?>

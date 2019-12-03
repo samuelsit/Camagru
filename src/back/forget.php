@@ -1,12 +1,16 @@
 <?php
     require_once('../../config/database.php');
 
-    if (empty($_POST['email']))
+    if (empty($_POST['email'])) {
         header('Location: ../front/forget.php?error=1');
+        exit();
+    }
     
     $mailExist = $db->query("SELECT COUNT(*) FROM access WHERE acc_email = \"".$_POST['email']."\"")->fetch();
-    if ($mailExist[0] == 0)
+    if ($mailExist[0] == 0) {
         header('Location: ../front/reinit.php?error=2');
+        exit();
+    }
 
     $mail = $db->query("SELECT acc_firstname, acc_key FROM access WHERE acc_email = \"".$_POST['email']."\"")->fetch();
 
@@ -27,7 +31,11 @@
                 </body>
             </html>';
     
-    if (mail($destinataire, $sujet, $message, implode("\r\n", $entete)) == TRUE)
+    if (mail($destinataire, $sujet, $message, implode("\r\n", $entete)) == TRUE) {
         header('Location: ../front/login.php?mail='.$_POST['email'].'');
-    else
+        exit();
+    }
+    else {
         header('Location: ../front/login.php?mail=2');
+        exit();
+    }
