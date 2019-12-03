@@ -71,8 +71,14 @@ else {
                         $image = "../../ressources/nonExist.png";
                     else
                         $image = '../back/mergepic.php?pic='.$pic['pic_id'].'&filter='.$pic['pic_filter'];
+                    $like = $db->query('SELECT COUNT(*) FROM likes WHERE like_pic = '.$pic['pic_id'].'')->fetch();
+                    if ($like[0] == 0)
+                        $coeur = '';
+                    else
+                        $coeur = ' &middot; '.$like[0].' ❤️';
                     echo '<div class="col-sm-6 col-md-4 col-lg-3 mt-lg-0 mt-2 mb-2">
                         <a href="picture.php?pic='.$pic['pic_id'].'"><img class="img-fluid rounded bg-dark p-2" src="'.$image.'"></a>
+                        <p class="font-weight-bold text-light">'.$user['acc_user'].' &middot; '.date("d/m/y", strtotime($pic['pic_date'])).$coeur.'</p>
                     </div>';
                 }
             ?>

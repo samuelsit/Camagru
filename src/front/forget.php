@@ -14,7 +14,7 @@ require_once('../../includes/header.php');
                 if (isset($_GET['error']) && $_GET['error'] == 1)
                     echo '<br><p class="text-danger font-weight-bold">Veuillez remplir le champ e-mail.</p>';
                 else if (isset($_GET['error']) && $_GET['error'] == 2)
-                    echo '<br><p class="text-danger font-weight-bold">L\'e-mail entré n\'existe pas dans la base de données.</p>';
+                    echo '<br><p class="text-danger font-weight-bold">L\'e-mail renseigné n\'existe pas dans la base de données.</p>';
                 ?>
                 <br>
             </div>

@@ -45,16 +45,20 @@
       <?php
          $req = $db->query("SELECT * FROM picture ORDER BY pic_date DESC LIMIT ".(($currentPage-1)*$nbPerPage).",".$nbPerPage);
          while ($pic = $req->fetch()) {
-            $like = $db->query('SELECT COUNT(*) FROM likes WHERE like_pic = '.$pic['pic_id'].'')->fetch();
+           $like = $db->query('SELECT COUNT(*) FROM likes WHERE like_pic = '.$pic['pic_id'].'')->fetch();
            $user = $db->query("SELECT acc_user FROM access WHERE acc_id = ".$pic['pic_user']."")->fetch();
            $img = file_exists('uploads/'.$pic['pic_data']);
            if ($img == FALSE)
                $image = "ressources/nonExist.png";
             else
                $image = 'src/back/mergepic.php?pic='.$pic['pic_id'].'&filter='.$pic['pic_filter'];
+            if ($like[0] == 0)
+               $coeur = '';
+            else
+               $coeur = ' &middot; '.$like[0].' ❤️';
            echo '<div class="col-lg-2 col-md-3 col-sm-6 p-2">
                    <a href="src/front/picture.php?pic='.$pic['pic_id'].'"><img class="img-fluid rounded bg-dark p-2" src="'.$image.'"></a>
-                   <a href="src/front/profile.php?user='.$user['acc_user'].'"><p class="font-weight-bold text-light">'.$user['acc_user'].' &middot; '.date("d/m/y", strtotime($pic['pic_date'])).' &middot; '.$like[0].' ❤️</p></a>
+                   <a href="src/front/profile.php?user='.$user['acc_user'].'"><p class="font-weight-bold text-light">'.$user['acc_user'].' &middot; '.date("d/m/y", strtotime($pic['pic_date'])).$coeur.'</p></a>
                </div>';
          }
          

@@ -8,7 +8,7 @@
     
     $mailExist = $db->query("SELECT COUNT(*) FROM access WHERE acc_email = \"".$_POST['email']."\"")->fetch();
     if ($mailExist[0] == 0) {
-        header('Location: ../front/reinit.php?error=2');
+        header('Location: ../front/forget.php?error=2');
         exit();
     }
 
