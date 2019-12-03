@@ -36,8 +36,8 @@ require_once('../../includes/header.php');
             </div>
             <div class="mt-2 bg-dark" style="position:relative;text-align:center;">
                 <img src="" id="imagec" class="d-none">
-                <img id="preview" width="380" height="260">
-                <img id="previewfilter" width="380" height="260" src="../../ressources/filtres/0.png" style="position:absolute; top:0px; left:calc(50% - 190px);">
+                <img id="preview" width="360" height="270">
+                <img id="previewfilter" width="360" height="270" src="../../ressources/filtres/0.png" style="position:absolute; top:0px; left:calc(50% - 180px);">
             </div>
         </div>
     </div>

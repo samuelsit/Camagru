@@ -10,6 +10,10 @@ else {
     $user = NULL;
     $focus = NULL;
 }
+if (!empty($_SESSION['user'])) {
+    header('Location: ../../index.php');
+    exit();
+}
 ?>
 
 <div class="container-fluid">

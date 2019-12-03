@@ -7,11 +7,11 @@ try {
     $DB_PASSWORD = 'root';
 
     $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-	  $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	  $db->exec("SET NAMES 'UTF8'");
-	  $db->exec("DROP DATABASE IF EXISTS camagru");
-	  $db->exec("CREATE DATABASE camagru");
-	  $db->exec("use camagru");
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$db->exec("SET NAMES 'UTF8'");
+	$db->exec("DROP DATABASE IF EXISTS camagru");
+	$db->exec("CREATE DATABASE camagru");
+	$db->exec("use camagru");
 
     $db->exec("CREATE TABLE `access` (
         `acc_id` int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
@@ -27,9 +27,9 @@ try {
         `acc_actif` int(1) NOT NULL DEFAULT '0'
     )");
 
-	  $db->exec("CREATE TABLE `picture` (
+	$db->exec("CREATE TABLE `picture` (
         `pic_id` int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
-        `pic_acc` int(11) NOT NULL,
+        `pic_user` int(11) NOT NULL,
         `pic_data` varchar(255) NOT NULL,
         `pic_filter` int(11) NOT NULL,
         `pic_date` datetime NOT NULL
@@ -48,6 +48,8 @@ try {
         `like_user` int(11) NOT NULL,
         `like_pic` int(11) NOT NULL
     )");
+
+    $db = NULL;
 }
 catch (PDOException $e) {
     die('Erreur : ' . $e->getMessage());
