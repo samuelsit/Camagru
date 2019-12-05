@@ -31,11 +31,12 @@ if (isset($_GET['pic']) || isset($_POST['pic']))
         }
         
         if ($error == 0 && (isset($_POST['msg']) && isset($pic))) {
+	    $msg = htmlspecialchars($_POST['msg']);
             $req = $db->prepare("INSERT INTO comments (com_user, com_pic, com_data, com_date) VALUES (:pseudo, :pic, :com, :jour)");
             $req->execute(array(
                 'pseudo' => $user_id['acc_id'],
                 'pic' => $pic,
-                'com' => $_POST['msg'],
+                'com' => $msg,
                 'jour' => date("Y-m-d")." ".date("H:i:s")
             ));
             $destinataire = $pic_user['acc_email'];
